@@ -10,6 +10,7 @@ interface IForm {
 
 export const useWebSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [messages, setMessages] = useState<IForm[]>([]);
 
   useEffect(() => {
     const newSocket = io(url);
@@ -19,12 +20,13 @@ export const useWebSocket = () => {
   useEffect(() => {
     if (socket) {
       socket.on("message", (data: IForm) => {
-        console.log("recebida", data);
+        setMessages((prev)=> [...prev, data])
       });
     }
   }, [socket]);
 
   return {
     socket,
+    messages
   };
 };
