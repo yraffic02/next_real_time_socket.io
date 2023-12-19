@@ -1,6 +1,5 @@
 import { useWebSocket } from "@/hook/useSocket";
-import { useEffect, useState } from "react";
-import { Socket, io } from "socket.io-client";
+import { useState } from "react";
 
 export const useForm = () => {
   const [name, setName] = useState<string>("");
