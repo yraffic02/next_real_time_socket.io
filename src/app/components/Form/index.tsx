@@ -1,10 +1,9 @@
-'use client'
+"use client";
 
 import { useForm } from "./useForm";
 
-
 export const Form = () => {
-   const {handleSendMessage, setMessage, setName, name, message} = useForm()
+  const { handleSendMessage, setMessage, setName, name, message } = useForm();
 
   return (
     <form className="flex flex-col w-1/2 gap-3" onSubmit={handleSendMessage}>
