@@ -1,6 +1,6 @@
-import { url } from "@/constants";
 import { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
+import { url } from "@/constants";
 
 interface IForm {
   id: string;
@@ -13,20 +13,33 @@ export const useWebSocket = () => {
   const [messages, setMessages] = useState<IForm[]>([]);
 
   useEffect(() => {
-    const newSocket = io(url);
-    setSocket(newSocket);
+    try {
+      const newSocket = io(url);
+      setSocket(newSocket);
+      
+      return () => {
+        newSocket.disconnect();
+      };
+    } catch (error) {
+      console.error("Erro ao criar o WebSocket:", error);
+    }
   }, []);
 
   useEffect(() => {
     if (socket) {
-      socket.on("message", (data: IForm) => {
-        setMessages((prev)=> [...prev, data])
-      });
+      const handleSocketMessage = (data: IForm) => {
+        setMessages((prev) => [...prev, data]);
+      };
+
+      socket.on("message", handleSocketMessage);
+      return () => {
+        socket.off("message", handleSocketMessage);
+      };
     }
   }, [socket]);
 
   return {
     socket,
-    messages
+    messages,
   };
 };
